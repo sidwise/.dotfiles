@@ -7,9 +7,8 @@
 (setq package-archives
       (quote
        (("gnu" . "http://elpa.gnu.org/packages/")
-	;;("marmalade" . "http://marmalade-repo.org/packages/")
+	("marmalade" . "http://marmalade-repo.org/packages/")
 	("melpa" . "http://melpa.milkbox.net/packages/"))))
-
 (setq package-list
       '(
 	async
@@ -29,7 +28,7 @@
 	find-file-in-project
 	git-commit
 	highlight-current-line
-	highlight-indentation
+	;; highlight-indentation
 	ivy
 	jedi
 	jedi-core
@@ -37,16 +36,21 @@
 	magit-popup
 	popup
 	python-environment
+	anaconda-mode
 	python-mode
 	pyvenv
 	w3m
 	with-editor
 	yaml-mode
+	py-autopep8
 	yasnippet
 	neotree
 	))
 (package-initialize)
-
+(eval-after-load "python"
+  '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+(add-hook 'jedi-mode-hook 'jedi-direx:setup)
+(add-hook 'python-mode-hook 'anaconda-mode)
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -75,6 +79,11 @@
 (require 'cl)
 (require 'calc)
 (require 'saveplace)
+(require 'auto-complete-nxml)
+;; Keystroke to popup help about something at point.
+(setq auto-complete-nxml-popup-help-key "C-:")
+;; Keystroke to toggle on/off automatic completion.
+(setq auto-complete-nxml-toggle-automatic-key "C-c C-t")
 
 (load-library	"server")
 (load-library	"savehist")
@@ -86,7 +95,7 @@
 ;; ajoute la numérotation de lignes par défaut
 ;; dans tous les buffers visités
 ;(global-linum-mode t)
-(elpy-enable) ;http://elpy.readthedocs.org/en/latest/introduction.html
+;; (elpy-enable) ;http://elpy.readthedocs.org/en/latest/introduction.html
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 ;; (global-highlight-changes-mode t) ;; http://www.emacswiki.org/emacs/tmux_for_collaborative_editing
@@ -247,6 +256,8 @@
 (global-set-key			"\C-x&"			'delete-other-windows)
 (global-set-key			"\C-xé"			'split-window-below)
 (global-set-key			"\C-x\""		'split-window-right)
+(global-set-key (kbd "C-M-=") 'default-text-scale-increase)
+(global-set-key (kbd "C-M--") 'default-text-scale-decrease)
 
 (define-key global-map		"\C-z"			'undo)
 (define-key global-map		"\C-v"			'scroll-other-window)
@@ -256,7 +267,6 @@
 (define-key global-map		"\C-cs"			'synonymes-search)
 (define-key global-map		"\C-cb"			'display-buffer)
 (define-key global-map		"\C-cn"			'find-file-other-window)
-
 ;; (define-key dired-mode-map	(kbd "C-p")		'dired-omit-mode)
 ;; (define-key dired-mode-map	(kbd "C-o")		'other-window)
 ;; (define-key dired-mode-map	(kbd "<return>")	'dired-find-alternate-file) ; was dired-advertised-find-file
@@ -310,7 +320,48 @@
 ;; 					 comint-postoutput-scroll-to-bottom
 ;; 					 comint-truncate-buffer)
 ;; 	comint-buffer-maximum-size 500)
+;;;; Programming Common
 
+
+;;flymake
+(require 'flymake)
+;;; indent
+(setq-default tab-width 4)
+(setq standard-indent 4)
+
+
+;;; python
+;; (require 'flymake-python-pyflakes)
+;; (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
+;; (setq flymake-python-pyflakes-executable "flake8")
+;; (add-hook 'python-mode-hook
+;; 		  (lambda () (setq indent-tabs-mode nil)))
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+
+;;; css
+(require 'flymake-css)
+(add-hook 'css-mode-hook 'flymake-css-load)
+(setq flymake-css-lint-command "csslint --ignore=adjoining-classes")
+
+;;; js
+(setq auto-mode-alist (cons '("\\.js$" . js3-mode) auto-mode-alist))
+(require 'flymake-jslint)
+(add-hook 'js3-mode-hook 'flymake-jslint-load)
+(add-hook 'js3-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil
+		  js3-indent-level 4
+		  c-basic-offset 4)
+	    ))
+
+;;; XML
+(add-hook 'nxml-mode-hook
+	  '(lambda()
+	     (setq indent-tabs-mode nil)
+	     (modify-syntax-entry ?' ".")
+	     ))
 ;; (defun odoo_start()
 ;;   (interactive)
 ;;   (let (
@@ -449,8 +500,11 @@
       (load custom-user-file)))
 
 
+
 ;; * disable electric-indent in rst-mode
 ;; http://emacs.stackexchange.com/a/14053/13367
 (defun my-rst-mode-hook ()
   (electric-indent-local-mode -1))
 (add-hook 'rst-mode-hook #'my-rst-mode-hook)
+
+(sid-theme)
