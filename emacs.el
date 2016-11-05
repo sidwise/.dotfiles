@@ -47,9 +47,9 @@
 	neotree
 	))
 (package-initialize)
-(eval-after-load "python"
-  '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
-(add-hook 'jedi-mode-hook 'jedi-direx:setup)
+;; (eval-after-load "python"
+;;   '(define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer))
+;; (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 (add-hook 'python-mode-hook 'anaconda-mode)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -95,9 +95,9 @@
 ;; ajoute la numérotation de lignes par défaut
 ;; dans tous les buffers visités
 ;(global-linum-mode t)
-;; (elpy-enable) ;http://elpy.readthedocs.org/en/latest/introduction.html
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+(elpy-enable) ;http://elpy.readthedocs.org/en/latest/introduction.html
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:complete-on-dot t)
 ;; (global-highlight-changes-mode t) ;; http://www.emacswiki.org/emacs/tmux_for_collaborative_editing
 (ffap-bindings)
 (recentf-mode		1)
@@ -326,16 +326,16 @@
 ;;flymake
 (require 'flymake)
 ;;; indent
-(setq-default tab-width 4)
-(setq standard-indent 4)
+;; (setq-default tab-width 4)
+;; (setq standard-indent 4)
 
 
 ;;; python
 ;; (require 'flymake-python-pyflakes)
 ;; (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 ;; (setq flymake-python-pyflakes-executable "flake8")
-;; (add-hook 'python-mode-hook
-;; 		  (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'python-mode-hook
+		  (lambda () (setq indent-tabs-mode nil)))
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
@@ -499,12 +499,12 @@
   (if (file-exists-p custom-user-file)
       (load custom-user-file)))
 
-
-
 ;; * disable electric-indent in rst-mode
 ;; http://emacs.stackexchange.com/a/14053/13367
 (defun my-rst-mode-hook ()
   (electric-indent-local-mode -1))
 (add-hook 'rst-mode-hook #'my-rst-mode-hook)
+
+(load-file "~/.dotfiles/tabbar-custom.el")
 
 (sid-theme)
