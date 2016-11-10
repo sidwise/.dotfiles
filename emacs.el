@@ -11,6 +11,9 @@
 	("melpa" . "http://melpa.milkbox.net/packages/"))))
 (setq package-list
       '(
+	auto-complete-nxml
+	flymake-css
+	flymake-jslint
 	async
 	auto-complete
 	color-theme
