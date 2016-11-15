@@ -30,18 +30,10 @@
 	      (t "All"))))
 
 (setq	tabbar-buffer-groups-function		'mygroups
-;; =======
-;; (setq	tabbar-buffer-groups-function		(lambda ()
-;; 						  (list "All Buffers"))
-;; >>>>>>> Adding tabbar
 	tabbar-buffer-list-function		(lambda ()
 						  (remove-if
 						   (lambda(buffer)
 						     (find (aref (buffer-name buffer) 0) " *"))
-;; <<<<<<< HEAD
 						   (buffer-list))
 						  )
-;; =======
-;; 						   (buffer-list)))
-;; >>>>>>> Adding tabbar
 	)
