@@ -48,6 +48,8 @@
 	py-autopep8
 	yasnippet
 	neotree
+	tabbar
+	tabbar-ruler
 	))
 (package-initialize)
 ;; (eval-after-load "python"
