@@ -471,7 +471,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:overline nil :inherit nil :stipple nil :background "gray2" :foreground "#FFF991" :inverse-video nil :box nil :strike-through nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:overline nil :inherit nil :stipple nil :background "#0e0f0f" :foreground "#FFF991" :inverse-video nil :box nil :strike-through nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(border ((t nil)))
  '(cursor ((t (:background "firebrick1" :foreground "black"))))
  '(flymake-errline ((t (:inherit error :foreground "brightred"))))
@@ -512,4 +512,26 @@
 
 (load-file "~/.dotfiles/tabbar-custom.el")
 
+;; add-to-list 'load-path "~/.emacs.d/elpa/powerline/powerline-20161121.2320/")
+(require 'powerline)
+
+;; ;; Moe-theme
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/powerline-20161121.2320/")
+;; (add-to-list 'load-path "~/.emacs.d/elpa/moe-theme-20170111.1838/")
+(require 'moe-theme)
+
+;; ;; Show highlighted buffer-id as decoration. (Default: nil)
+;; (setq moe-theme-highlight-buffer-id t)
+
+;; ;; Resize titles (optional).
+;; (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
+;; (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
+;; (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+(add-to-list 'load-path "./neotree")
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+;; ;; Choose a color for mode-line.(Default: blue)
+(moe-theme-set-color 'beige)
+(powerline-default-theme)
 (sid-theme)
