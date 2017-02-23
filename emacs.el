@@ -471,7 +471,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:overline nil :inherit nil :stipple nil :background "#0e0f0f" :foreground "#FFF991" :inverse-video nil :box nil :strike-through nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:overline nil :inherit nil :stipple nil :background "#303030" :foreground "#FFF991" :inverse-video nil :box nil :strike-through nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(border ((t nil)))
  '(cursor ((t (:background "firebrick1" :foreground "black"))))
  '(flymake-errline ((t (:inherit error :foreground "brightred"))))
@@ -532,6 +532,6 @@
 (global-set-key [f8] 'neotree-toggle)
 
 ;; ;; Choose a color for mode-line.(Default: blue)
-(moe-theme-set-color 'beige)
+(moe-theme-set-color 'dark)
 (powerline-default-theme)
 (sid-theme)
