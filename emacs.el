@@ -48,6 +48,8 @@
 	py-autopep8
 	yasnippet
 	neotree
+	powerline
+	moe-theme
 	tabbar
 	tabbar-ruler
 	))
