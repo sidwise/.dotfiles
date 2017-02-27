@@ -32,6 +32,7 @@
 	git-commit
 	highlight-current-line
 	;; highlight-indentation
+	mode-icons
 	ivy
 	jedi
 	jedi-core
