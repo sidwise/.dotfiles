@@ -44,6 +44,8 @@
 	python-mode
 	pyvenv
 	w3m
+	hideshow
+	sgml-mode
 	with-editor
 	yaml-mode
 	py-autopep8
@@ -426,8 +428,9 @@
 (setq highlight-current-line-globally	t
       highlight-current-line-high-faces nil
       highlight-current-line-whole-line nil
-      hl-line-face			(quote highlight))
-
+      ;; hl-line-face			(quote highlight))
+      )
+(set-face-background hl-line-face "gray30")
 					; don't blink the cursor
 (blink-cursor-mode			nil)
 					; make sure transient mark mode is enabled (it should be by default,
@@ -539,3 +542,19 @@
 (moe-theme-set-color 'dark)
 (powerline-default-theme)
 (sid-theme)
+
+(require 'hideshow)
+(require 'sgml-mode)
+(require 'nxml-mode)
+
+(add-to-list 'hs-special-modes-alist
+	     '(nxml-mode
+	       "<!--\\|<[^/>]*[^/]>"
+	       "-->\\|</[^/>]*[^/]>"
+
+	       "<!--"
+	       sgml-skip-tag-forward
+	       nil))
+(add-hook 'nxml-mode-hook 'hs-minor-mode)
+;; optional key bindings, easier than hs defaults
+(define-key nxml-mode-map (kbd "C-c h") 'hs-toggle-hiding)
