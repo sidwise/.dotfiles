@@ -7,12 +7,13 @@
 (setq package-archives
       (quote
        (("gnu" . "http://elpa.gnu.org/packages/")
-	("marmalade" . "http://marmalade-repo.org/packages/")
+	;; ("marmalade" . "http://marmalade-repo.org/packages/")
 	("melpa" . "http://melpa.milkbox.net/packages/"))))
 (setq package-list
       '(
 	auto-complete-nxml
 	flymake-css
+	js2-refactor
 	flymake-jslint
 	async
 	auto-complete
@@ -30,7 +31,7 @@
 	epc
 	find-file-in-project
 	git-commit
-	highlight-current-line
+	;; highlight-current-line
 	;; highlight-indentation
 	mode-icons
 	ivy
@@ -38,6 +39,8 @@
 	jedi-core
 	magit
 	magit-popup
+	company-tern
+	web-mode
 	popup
 	python-environment
 	anaconda-mode
@@ -101,6 +104,9 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (put 'dired-find-alternate-file 'disabled nil)
+
+(require 'py-autopep8)
+(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; ajoute la numérotation de lignes par défaut
 ;; dans tous les buffers visités
@@ -354,7 +360,41 @@
 (require 'flymake-css)
 (add-hook 'css-mode-hook 'flymake-css-load)
 (setq flymake-css-lint-command "csslint --ignore=adjoining-classes")
-
+(custom-set-variables
+ '(web-mode-markup-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-enable-auto-pairing t)
+ '(web-mode-enable-auto-closing t)
+ '(web-mode-enable-css-colorization t)
+ '(web-mode-commet-style 2)
+ '(web-mode-enable-current-column-highlight t)
+ '(web-mode-enable-current-element-highlight t))
+(defun css-smie-rules (kind token)
+  (pcase (cons kind token)
+    (`(:elem . basic) css-indent-offset)
+    (`(:elem . arg) 0)
+    (`(:list-intro . ,(or `";" `"")) t) ;"" stands for BOB (bug#15467).
+    (`(:before . "{")
+     (when (or (smie-rule-hanging-p) (smie-rule-bolp))
+       (smie-backward-sexp ";")
+       (smie-indent-virtual)))
+    (`(:before . ,(or "{" "("))
+     (if (smie-rule-hanging-p) (smie-rule-parent 0)))
+    ;; *** Additional rule ***
+    (`(:after . ":-property") css-indent-offset)))
+(defadvice smie-indent-line (after smie-indent-line-after-hack activate)
+  "Customize your own css coding style."
+  (if (eq major-mode 'css-mode)
+      (let* ((cur-line (buffer-substring-no-properties
+                        (line-beginning-position)
+                        (line-end-position))))
+        (if (string-match "^\\( +\\)url" cur-line)
+            (let* ((empty-spaces (match-string 1 cur-line)))
+              (replace-regexp empty-spaces
+                              (make-string (+ (length empty-spaces) css-indent-offset) 32)
+                              nil
+                              (line-beginning-position) (line-end-position)))))))
 ;;; js
 (setq auto-mode-alist (cons '("\\.js$" . js3-mode) auto-mode-alist))
 (require 'flymake-jslint)
@@ -366,6 +406,57 @@
 		  c-basic-offset 4)
 	    ))
 
+(require 'company)
+(require 'company-tern)
+
+(add-to-list 'company-backends 'company-tern)
+(add-hook 'js2-mode-hook (lambda ()
+                           (tern-mode)
+                           (company-mode)))
+
+(require 'web-mode)
+
+(defun web-mode-element-close-and-indent ()
+  (interactive)
+  (web-mode-element-close)
+  (indent-for-tab-command))
+
+ (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close-and-indent)
+
+(setq web-mode-auto-close-style 1)
+(setq web-mode-tag-auto-close-style 1)
+
+;; Auto-Complete support
+ (setq web-mode-ac-sources-alist
+       '(("css" . (ac-source-css-property))
+     ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+
+ (setq web-mode-extra-snippets '(
+                 ("django" . (
+                          ("a" . ("{% " . " %}"))
+                          ("%" . ("{% " . " %}"))
+                          )
+                  ))
+       )
+
+
+;; Django & Web-mode
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'ac-modes 'web-mode)
+(setq web-mode-engines-alist
+      '(
+        ("django" . "\\.html\\'")
+        ("django" . "\\.ejs\\'")
+        ))
+
+;; Disable completion keybindings, as we use xref-js2 instead
+(define-key tern-mode-keymap (kbd "M-.") nil)
+(define-key tern-mode-keymap (kbd "M-,") nil)
+
+(require 'js2-refactor)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(setq js2-skip-preprocessor-directives t)
+(add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
 ;;; XML
 (add-hook 'nxml-mode-hook
 	  '(lambda()
@@ -423,7 +514,7 @@
 					;   Cursor   ;
 					;------------;
 					; highlight the current line
-(require 'highlight-current-line)
+;; (require 'highlight-current-line)
 (global-hl-line-mode			t)
 (setq highlight-current-line-globally	t
       highlight-current-line-high-faces nil
@@ -534,10 +625,18 @@
 ;; (setq moe-theme-resize-markdown-title '(1.5 1.4 1.3 1.2 1.0 1.0))
 ;; (setq moe-theme-resize-org-title '(1.5 1.4 1.3 1.2 1.1 1.0 1.0 1.0 1.0))
 ;; (setq moe-theme-resize-rst-title '(1.5 1.4 1.3 1.2 1.1 1.0))
+
 (add-to-list 'load-path "./neotree")
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
-
+(require 'yasnippet)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets"))
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets"
+	"~/.emacs.d/plugins/emacs-for-python/snippets/django"
+	"~/.emacs.d/plugins/yasnippet/snippets"))
+(yas-global-mode 1)
 ;; ;; Choose a color for mode-line.(Default: blue)
 (moe-theme-set-color 'dark)
 (powerline-default-theme)
@@ -558,3 +657,5 @@
 (add-hook 'nxml-mode-hook 'hs-minor-mode)
 ;; optional key bindings, easier than hs defaults
 (define-key nxml-mode-map (kbd "C-c h") 'hs-toggle-hiding)
+(push "~/.emacs.d/lisp" load-path)
+;; (require 'odemux)
