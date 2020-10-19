@@ -1,14 +1,36 @@
-;; * ENCODING
+; * ENCODING
 (prefer-coding-system		'utf-8)
 (set-default-coding-systems	'utf-8)
 (set-terminal-coding-system	'utf-8)
 (set-keyboard-coding-system	'utf-8)
 ;; * Emacs Packages repositories
+(setq url-proxy-services
+      '(("no_proxy" . "^\\(localhost\\|10\\..*\\)")
+        ("http" . "192.168.1.68:3128")
+        ("https" . "192.168.1.68:3128")))
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
+
+(with-current-buffer
+    (url-retrieve-synchronously "http://orgmode.org/elpa/archive-contents")
+  (goto-char (point-min))
+  (re-search-forward "^$")
+  (delete-region (point) (point-min))
+  (buffer-string))
+
 (setq package-archives
       (quote
        (("gnu" . "http://elpa.gnu.org/packages/")
 	;; ("marmalade" . "http://marmalade-repo.org/packages/")
-	("melpa" . "http://melpa.milkbox.net/packages/"))))
+	("melpa" . "http://melpa.milkbox.net/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/"))))
+
+
 (setq package-list
       '(
 	auto-complete-nxml
@@ -17,36 +39,36 @@
 	flymake-jslint
 	async
 	auto-complete
-	color-theme
+	color-theme-modern
 	company
 	concurrent
 	ctable
 	dash
 	deferred
 	docker
-	docker-api
+	;; docker-api
 	dockerfile-mode
 	docker-tramp
 	elpy
 	epc
 	find-file-in-project
 	git-commit
-	;; highlight-current-line
-	;; highlight-indentation
+	highlight-current-line
+	highlight-indentation
 	mode-icons
 	ivy
 	jedi
 	jedi-core
 	magit
 	magit-popup
-	company-tern
+	company
 	web-mode
 	popup
 	python-environment
 	anaconda-mode
 	python-mode
 	pyvenv
-	w3m
+	;; w3m
 	hideshow
 	sgml-mode
 	with-editor
@@ -66,7 +88,7 @@
 (add-hook 'python-mode-hook 'anaconda-mode)
 (unless package-archive-contents
   (package-refresh-contents))
-
+(setq elpy-rpc-python-command "python3")
 ; install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
@@ -397,19 +419,19 @@
                               (line-beginning-position) (line-end-position)))))))
 ;;; js
 (setq auto-mode-alist (cons '("\\.js$" . js3-mode) auto-mode-alist))
-(require 'flymake-jslint)
-(add-hook 'js3-mode-hook 'flymake-jslint-load)
-(add-hook 'js3-mode-hook
-	  (lambda ()
-	    (setq indent-tabs-mode nil
-		  js3-indent-level 4
-		  c-basic-offset 4)
-	    ))
+;; (require 'flymake-jslint)
+;; (add-hook 'js3-mode-hook 'flymake-jslint-load)
+;; (add-hook 'js3-mode-hook
+;; 	  (lambda ()
+;; 	    (setq indent-tabs-mode nil
+;; 		  js3-indent-level 4
+;; 		  c-basic-offset 4)
+;; 	    ))
 
 (require 'company)
-(require 'company-tern)
+;; (require 'company-tern)
 
-(add-to-list 'company-backends 'company-tern)
+;; (add-to-list 'company-backends 'company-tern)
 (add-hook 'js2-mode-hook (lambda ()
                            (tern-mode)
                            (company-mode)))
@@ -442,7 +464,8 @@
 
 ;; Django & Web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
-(add-to-list 'ac-modes 'web-mode)
+;; (add-to-list ;; 'ac-modes
+;;              'web-mode)
 (setq web-mode-engines-alist
       '(
         ("django" . "\\.html\\'")
@@ -450,8 +473,8 @@
         ))
 
 ;; Disable completion keybindings, as we use xref-js2 instead
-(define-key tern-mode-keymap (kbd "M-.") nil)
-(define-key tern-mode-keymap (kbd "M-,") nil)
+;; (define-key tern-mode-keymap (kbd "M-.") nil)
+;; (define-key tern-mode-keymap (kbd "M-,") nil)
 
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
@@ -554,7 +577,7 @@
 					;-----------------;
 
 					; use the "Subtle Hacker" color theme as a base for the custom scheme
-(require 'color-theme)
+(require 'color-theme-modern)
 (color-theme-initialize)
 (setq color-theme-is-global t)
 (color-theme-subtle-hacker)

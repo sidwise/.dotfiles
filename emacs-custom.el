@@ -3,6 +3,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("7675ffd2f5cb01a7aab53bcdd702fa019b56c764900f2eea0f74ccfc8e854386" "ae65ccecdcc9eb29ec29172e1bfb6cadbe68108e1c0334f3ae52414097c501d2" "8adeb0bf3e77356c0aa34dd447f8e52ba56f8f9d4ce58d7c020f00e4bfff32f6" default)))
  '(dired-auto-revert-buffer (quote dired-directory-changed-p))
  '(dired-listing-switches "-alh --group-directories-first ")
  '(highlight-nonselected-windows t)
@@ -14,7 +17,7 @@
  '(org-babel-load-languages
    (quote
     ((emacs-lisp . t)
-     (sh . t)
+     (shell . t)
      (awk . t)
      (python . t)
      (ditaa . t)
@@ -34,7 +37,7 @@
  '(org-src-window-setup (quote current-window))
  '(package-selected-packages
    (quote
-    (company-tern tide js2-refactor color-theme-x pygen docker-compose-mode markdown-mode+ markdown-mode treemacs-projectile yaml-mode web-mode web-beautify w3m tabbar-ruler sphinx-doc python-mode python-django py-autopep8 powerline-evil outlined-elisp-mode neotree moe-theme magithub key-chord js2-mode js-auto-format-mode jedi hydra highlight-current-line flymake-python-pyflakes flymake-json flymake-jslint flymake-css emamux dockerfile-mode docker-api docker django-theme django-snippets django-mode company-web color-theme-solarized auto-complete-nxml anaconda-mode ac-html-csswatcher)))
+    (company-jedi magit-simple-keys magit magit-popup evil-magit forge flymake-jslint magit-annex magit-filenotify magit-find-file magit-gerrit magit-gitflow magit-imerge magit-lfs magit-org-todos magit-section magit-stgit magit-svn magit-tbdiff magit-todos magit-topgit eldoc sphinx-mode jetbrains-darcula-theme ob-sml company-tern tide js2-refactor color-theme-x pygen docker-compose-mode markdown-mode+ markdown-mode treemacs-projectile yaml-mode web-mode web-beautify w3m tabbar-ruler sphinx-doc python-mode python-django py-autopep8 powerline-evil outlined-elisp-mode neotree moe-theme magithub key-chord js2-mode js-auto-format-mode jedi hydra highlight-current-line flymake-python-pyflakes flymake-json flymake-css emamux dockerfile-mode docker-api docker django-theme django-snippets django-mode company-web color-theme-solarized auto-complete-nxml anaconda-mode ac-html-csswatcher)))
  '(read-mail-command (quote gnus))
  '(recentf-auto-cleanup (quote never))
  '(safe-local-variable-values
@@ -64,7 +67,7 @@
  '(default ((t (:overline nil :inherit nil :stipple nil :background "#303030" :foreground "#FFF991" :inverse-video nil :box nil :strike-through nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(border ((t nil)))
  '(cursor ((t (:background "firebrick1" :foreground "black"))))
- '(flymake-errline ((t (:inherit error :foreground "brightred"))))
+ '(flymake-error ((t (:inherit error :foreground "brightred"))))
  '(font-lock-comment-delimiter-face ((default (:inherit font-lock-comment-face :weight ultra-bold)) (((class color) (min-colors 16)) nil)))
  '(font-lock-comment-face ((t (:foreground "lime green"))))
  '(font-lock-doc-face ((t (:foreground "tomato" :slant italic))))
@@ -86,6 +89,6 @@
  '(mouse ((t (:background "Grey" :foreground "black"))))
  '(org-block ((t (:inherit shadow))))
  '(org-block-background ((t (:background "color-255"))))
- '(org-block-begin-line ((t (:inherit org-meta-line))) t)
- '(org-block-end-line ((t (:inherit org-meta-line))) t)
+ '(org-block-begin-line ((t (:inherit org-meta-line))))
+ '(org-block-end-line ((t (:inherit org-meta-line))))
  '(trailing-whitespace ((((class color) (background dark)) (:background "firebrick1")))))
