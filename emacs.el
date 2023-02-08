@@ -11,9 +11,10 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
 (with-current-buffer
@@ -23,11 +24,17 @@
   (delete-region (point) (point-min))
   (buffer-string))
 
+(defun remove-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
+
 (setq package-archives
       (quote
        (("gnu" . "http://elpa.gnu.org/packages/")
 	;; ("marmalade" . "http://marmalade-repo.org/packages/")
-	("melpa" . "http://melpa.milkbox.net/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/"))))
 
 
@@ -578,9 +585,9 @@
 
 					; use the "Subtle Hacker" color theme as a base for the custom scheme
 (require 'color-theme-modern)
-(color-theme-initialize)
+;; (color-theme-initialize)
 (setq color-theme-is-global t)
-(color-theme-subtle-hacker)
+;; (color-theme-subtle-hacker)
 					; make sure the frames have the dark background mode by default
 (setq default-frame-alist (quote (
 				  (frame-background-mode . dark)
@@ -678,6 +685,8 @@
 	       sgml-skip-tag-forward
 	       nil))
 (add-hook 'nxml-mode-hook 'hs-minor-mode)
+
+
 ;; optional key bindings, easier than hs defaults
 (define-key nxml-mode-map (kbd "C-c h") 'hs-toggle-hiding)
 (push "~/.emacs.d/lisp" load-path)
